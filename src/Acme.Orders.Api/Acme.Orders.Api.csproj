@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MediatR" Version="8.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Acme.Orders.Application\Acme.Orders.Application.csproj" />
+    <ProjectReference Include="..\Acme.Orders.Common\Acme.Orders.Common.csproj" />
+    <ProjectReference Include="..\Acme.Orders.Infrastructure\Acme.Orders.Infrastructure.csproj" />
+  </ItemGroup>
+
+
+</Project>
