@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Acme.Orders.Common.Enums;
+using Acme.Orders.Common.ValueObjects;
+using Acme.Orders.Domain.Services;
 
 namespace Acme.Orders.Domain.Entities
 {
@@ -13,6 +15,7 @@ namespace Acme.Orders.Domain.Entities
         public OrderStatus Status { get; private set; } = OrderStatus.New;
         public decimal Total { get; private set; }
         public decimal ShippingCost { get; private set; }
+        public Address ShippingAddress { get; private set; } 
         public IReadOnlyCollection<OrderItem> Items => _items;
 
         private readonly List<OrderItem> _items = new List<OrderItem>();
@@ -34,6 +37,11 @@ namespace Acme.Orders.Domain.Entities
         {
             _items.Remove(theItem);
             UpdateOrder();
+        }
+
+        public void CalculateShipping(IShippingCalculatorService shippingcalculator)
+        {
+            ShippingCost = shippingcalculator.CalculateShippingCost(ShippingAddress);
         }
 
         private void UpdateOrder()
