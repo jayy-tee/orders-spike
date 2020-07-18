@@ -1,0 +1,19 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: "orders-api-ingress"
+  namespace: "___namespace___"
+  annotations:
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/scheme: internet-facing
+  labels:
+    app: orders-api
+spec:
+  rules:
+    - host: ___hostname___
+      http:
+        paths:
+          - path: /*
+            backend:
+              serviceName: "orders-api"
+              servicePort: 80
