@@ -23,6 +23,12 @@ namespace Acme.Orders.Api.Controllers
             _mediator = mediator;
         }
 
+        [HttpGet]
+        [Route("live")]
+        public IActionResult CheckLiveness()
+        {
+            return Ok();
+        }
 
         [HttpGet]
         [Route("ready")]
@@ -36,7 +42,7 @@ namespace Acme.Orders.Api.Controllers
             {
                 // Swallow the exception for negative test case.
             }
-            
+
             return Ok();
         }
     }
