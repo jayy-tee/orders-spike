@@ -33,7 +33,11 @@ stages:
             regionName: 'ap-southeast-2'
             sourceImageName: '$(dockerImageName)'
             sourceImageTag: '$(Build.BuildNumber)'
-            repositoryName: '097554245028.dkr.ecr.ap-southeast-2.amazonaws.com/$(dockerImageName)'
+            repositoryName: '$(dockerImageName)'
             pushTag: '$(Build.BuildNumber)'
             autoCreateRepository: true
+        - task: PublishBuildArtifacts@1
+          inputs:
+            pathToPublish: 'deploy/k8s/'
+            artifactName: k8s
           
