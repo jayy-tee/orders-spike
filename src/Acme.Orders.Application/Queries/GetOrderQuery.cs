@@ -30,10 +30,7 @@ namespace Acme.Orders.Application.Queries
             public async Task<OrderDto> Handle(GetOrderQuery query, CancellationToken cancellationToken)
             {
                 var order = await _context.Orders.SingleOrDefaultAsync(o => o.Id == query.OrderId);
-                if (order == null)
-                {
-                    throw new NotFoundException("Order Not Found");
-                }
+                _ = order != null ? true : throw new NotFoundException("Order Not Found");
 
                 return order.MapToDto();
             }

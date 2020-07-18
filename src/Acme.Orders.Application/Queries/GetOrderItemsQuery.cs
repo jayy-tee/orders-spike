@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Acme.Orders.Application.Common;
+using Acme.Orders.Application.Exceptions;
 using Acme.Orders.Application.Model;
 using Acme.Orders.Application.Model.Extensions;
 using MediatR;
@@ -32,6 +33,7 @@ namespace Acme.Orders.Application.Queries
             public async Task<IEnumerable<OrderItemDto>> Handle(GetOrderItemsQuery query, CancellationToken cancellationToken)
             {
                 var order = await _context.Orders.Include(o => o.Items).SingleOrDefaultAsync(o => o.Id == query.OrderId);
+                _ = order != null ? true : throw new NotFoundException("Order Not Found");
                 var orderItems = order.Items.Select(i => i.MapToDto());
 
                 return await Task.FromResult(orderItems);
