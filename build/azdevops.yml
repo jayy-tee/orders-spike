@@ -3,6 +3,9 @@ name: $(Year:yyyy).$(Date:MMdd).$(rev:rr)-$(Build.SourceBranchName)
 trigger:
     - none
 
+variables:
+    dockerImageName: 'orders/api'
+
 stages:
 - stage: build
   displayName: Build Solution
@@ -16,11 +19,21 @@ stages:
           displayName: 'dotnet publish'
           inputs:
             command: publish
-            projects: 'src/*.sln'
-            arguments: '-c Release -p:Version=$(Build.BuildNumber) -p:WebPublishMethod=FileSystem -o $(Build.ArtifactStagingDirectory)'
-            publishWebProjects: true
+            projects: '**/*.sln'
+            arguments: '-c Release -p:Version=$(Build.BuildNumber)'
+            publishWebProjects: false
             zipAfterPublish: false
-        - task: PublishBuildArtifacts@1
+        - script: |
+            docker build -t $(dockerImageName):$(Build.BuildNumber) -f build/Dockerfile .
+          displayName: Build Docker container
+        - task: AmazonWebServices.aws-vsts-tools.ECRPushImage.ECRPushImage@1
+          displayName: 'Push Image to AWS'
           inputs:
-            pathToPublish: '$(Build.ArtifactStagingDirectory)'
-            artifactName: drop
+            awsCredentials: 'AWS-JT'
+            regionName: 'ap-southeast-2'
+            sourceImageName: '$(dockerImageName)'
+            sourceImageTag: '$(Build.BuildNumber)'
+            repositoryName: '097554245028.dkr.ecr.ap-southeast-2.amazonaws.com/$(dockerImageName)'
+            pushTag: '$(Build.BuildNumber)'
+            autoCreateRepository: true
+          
