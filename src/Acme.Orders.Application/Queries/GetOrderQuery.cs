@@ -31,7 +31,7 @@ namespace Acme.Orders.Application.Queries
             {
                 var order = await _context.Orders.SingleOrDefaultAsync(o => o.Id == query.OrderId);
                 _ = order != null ? true : throw new NotFoundException("Order Not Found");
-
+                
                 return order.MapToDto();
             }
         } 
