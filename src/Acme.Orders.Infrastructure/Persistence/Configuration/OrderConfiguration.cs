@@ -10,6 +10,7 @@ namespace Northwind.Persistence.Configurations
         {
             builder.HasKey(e => e.Id);
             builder.HasMany(e => e.Items).WithOne(i => i.Order);
+            builder.Ignore(e => e.ShippingAddress);
         }
     }
 }
