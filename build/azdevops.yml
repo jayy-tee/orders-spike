@@ -1,0 +1,26 @@
+name: $(Year:yyyy).$(Date:MMdd).$(rev:rr)-$(Build.SourceBranchName)
+
+trigger:
+    - none
+
+stages:
+- stage: build
+  displayName: Build Solution
+  jobs:
+  - job: build
+    displayName: Build Application
+    pool:
+        vmImage: 'ubuntu-latest'
+    steps:
+        - task: DotNetCoreCLI@2
+          displayName: 'dotnet publish'
+          inputs:
+            command: publish
+            projects: 'src/*.sln'
+            arguments: '-c Release -p:Version=$(Build.BuildNumber) -p:WebPublishMethod=FileSystem -o $(Build.ArtifactStagingDirectory)'
+            publishWebProjects: true
+            zipAfterPublish: false
+        - task: PublishBuildArtifacts@1
+          inputs:
+            pathToPublish: '$(Build.ArtifactStagingDirectory)'
+            artifactName: drop
