@@ -1,3 +1,5 @@
+using Acme.Orders.Api.Exceptions;
+using Acme.Orders.Api.Filters;
 using Acme.Orders.Application;
 using Acme.Orders.Infrastructure;
 using Microsoft.AspNetCore.Builder;
@@ -20,7 +22,9 @@ namespace Acme.Orders.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services.AddControllersWithViews(options =>
+                options.Filters.Add(typeof(ApiExceptionFilter))
+            );
             services.AddApplication();
             services.AddInfrastructure(Configuration);
         }
@@ -28,10 +32,7 @@ namespace Acme.Orders.Api
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
+            app.UseExceptionHandler(c => c.UseGlobalExceptionHandler(env));
 
             app.UseHttpsRedirection();
 
