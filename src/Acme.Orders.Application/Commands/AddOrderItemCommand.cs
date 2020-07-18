@@ -2,6 +2,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Acme.Orders.Application.Common;
+using Acme.Orders.Application.Exceptions;
 using Acme.Orders.Application.Model;
 using Acme.Orders.Application.Model.Extensions;
 using MediatR;
@@ -32,6 +33,7 @@ namespace Acme.Orders.Application.Commands
             public async Task<Unit> Handle(AddOrderItemCommand command, CancellationToken cancellationToken)
             {
                 var order = await _context.Orders.SingleOrDefaultAsync(o => o.Id == command.OrderId, cancellationToken);
+                _ = order != null ? true : throw new NotFoundException("Order Not Found");
             
                 order.AddItem(command.OrderItem.ToDomainModel());
                 _context.Orders.Update(order);

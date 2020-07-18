@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Acme.Orders.Application.Common;
+using Acme.Orders.Application.Exceptions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -31,6 +32,7 @@ namespace Acme.Orders.Application.Commands
             public async Task<Unit> Handle(DeleteOrderItemCommand command, CancellationToken cancellationToken)
             {
                 var order = await _context.Orders.Include(o => o.Items).SingleOrDefaultAsync(o => o.Id == command.OrderId, cancellationToken);
+                _ = order != null ? true : throw new NotFoundException("Order Not Found");
             
                 order.RemoveItem(order.Items.Where(i => i.Id == command.ItemId).Single());
                 await _context.SaveAsync(cancellationToken);
