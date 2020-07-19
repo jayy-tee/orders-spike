@@ -20,7 +20,7 @@ namespace Acme.Orders.Api.Logging
 
     public static class LogHelper
     {
-        private static List<string> _excludedEndpoints = new List<string> { "/health/ready", "/health/ok", "/" };
+        private static List<string> _excludedEndpoints = new List<string> { "/health/ready", "/health/live", "/" };
         public static LogEventLevel ExcludeHealthChecks(HttpContext ctx, double _, Exception ex) =>
             ex != null
                 ? LogEventLevel.Error
