@@ -24,8 +24,12 @@ spec:
         env:
         - name: DEPLOYMENT_VERSION
           value: ___deploymentVersion___
-        - name: ASPNETCORE_ENVIRONMENT
-          value: Production
+          - name: ASPNETCORE_ENVIRONMENT
+            value: Production
+          - name: SERILOG__PROPERTIES__ENVIRONMENT
+            value: Production
+          - name: Serilog__WriteTo__0__Args__serverUrl
+            value: ___serilogUrl___
         livenessProbe:
           httpGet:
             path: /health/live
