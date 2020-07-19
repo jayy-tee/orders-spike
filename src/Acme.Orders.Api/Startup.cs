@@ -1,5 +1,6 @@
 using Acme.Orders.Api.Exceptions;
 using Acme.Orders.Api.Filters;
+using Acme.Orders.Api.Logging;
 using Acme.Orders.Application;
 using Acme.Orders.Infrastructure;
 using Microsoft.AspNetCore.Builder;
@@ -7,6 +8,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Serilog;
+using System;
 
 namespace Acme.Orders.Api
 {
@@ -33,6 +36,7 @@ namespace Acme.Orders.Api
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseExceptionHandler(c => c.UseGlobalExceptionHandler(env));
+            app.UseSerilogRequestLogging();
 
             app.UseHttpsRedirection();
 

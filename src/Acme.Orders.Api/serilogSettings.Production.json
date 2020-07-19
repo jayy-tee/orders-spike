@@ -1,0 +1,25 @@
+{
+    "Serilog": {
+      "Using": [ "Serilog.Sinks.Console", "Serilog.Sinks.Seq" ],
+      "MinimumLevel": {
+        "Default": "Information",
+        "Override": {
+          "Microsoft": "Information",
+          "Microsoft.AspNetCore": "Warning"
+        }
+      },
+      "Properties": {
+        "Application": "Acme.Orders.Api",
+        "Environment": "___loggingEnvironment___"
+      },
+      "WriteTo": [
+        { "Name": "Seq", "Args": { "serverUrl": "___seqUrl___" } },
+        { "Name": "Console", 
+          "Args": { 
+            "restrictedToMinimumLevel": "Error",
+            "outputTemplate": "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}"
+          } 
+        }
+      ]
+    }
+  }
