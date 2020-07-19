@@ -5,6 +5,7 @@ metadata:
   name: orders
   labels:
     app: orders-api
+    version: ___deploymentVersion___
 spec:
   replicas: ___replicas___
   selector:
@@ -20,6 +21,9 @@ spec:
         image: ___dockerImage___
         ports:
         - containerPort: 80
+        env:
+        - name: DEPLOYMENT_VERSION
+          value: ___deploymentVersion___
         livenessProbe:
           httpGet:
             path: /health/live
