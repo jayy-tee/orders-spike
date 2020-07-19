@@ -24,6 +24,8 @@ spec:
         env:
         - name: DEPLOYMENT_VERSION
           value: ___deploymentVersion___
+        - name: ASPNETCORE_ENVIRONMENT
+          value: Production
         livenessProbe:
           httpGet:
             path: /health/live
