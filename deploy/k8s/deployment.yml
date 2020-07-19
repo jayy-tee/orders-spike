@@ -21,6 +21,9 @@ spec:
         image: ___dockerImage___
         ports:
         - containerPort: 80
+        env:
+        - name: DEPLOYMENT_VERSION
+          value: ___deploymentVersion___
         livenessProbe:
           httpGet:
             path: /health/live
