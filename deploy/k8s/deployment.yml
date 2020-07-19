@@ -5,6 +5,7 @@ metadata:
   name: orders
   labels:
     app: orders-api
+    version: ___deploymentVersion___
 spec:
   replicas: ___replicas___
   selector:
