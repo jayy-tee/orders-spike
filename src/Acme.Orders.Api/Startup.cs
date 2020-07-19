@@ -36,7 +36,11 @@ namespace Acme.Orders.Api
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseExceptionHandler(c => c.UseGlobalExceptionHandler(env));
-            app.UseSerilogRequestLogging();
+            app.UseSerilogRequestLogging(opts =>
+            {
+                opts.GetLevel = LogHelper.ExcludeHealthChecks;
+            });
+
 
             app.UseHttpsRedirection();
 
