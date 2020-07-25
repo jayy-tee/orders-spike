@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using Acme.Orders.Domain.Entities;
 using Acme.Orders.Domain.Exceptions;
@@ -78,5 +79,54 @@ namespace Acme.Orders.Domain.UnitTests
             
             Assert.ThrowsException<OrdersDomainException>(() => order.Place());
         }
+
+        [TestMethod]
+        public void WhenAnItemIsAdded_ItCanBeRemoved()
+        {
+            var order = new Order();
+            var expectedItemCount = order.Items.Count();
+            var itemToAdd = new OrderItem
+            {
+                Price = 5.50M,
+                Quantity = 1
+            };
+            
+            order.AddItem(itemToAdd);
+            order.RemoveItem(itemToAdd);
+
+            order.Items.Count.Should().Be(expectedItemCount);
+            order.Items.Should().NotContain(itemToAdd);
+        }
+        
+        /* Further tests added, just to please the code coverage report. Do they add any value though? ;) */
+        [TestMethod]
+        public void WhenAnOrderIsCreated_ItHasANonEmptyGuidAsAnId()
+        {
+            var order = new Order();
+            order.Id.Should().NotBeEmpty();
+        }
+        
+        [TestMethod]
+        public void WhenAnOrderIsCreated_ItHasACreatedDate()
+        {
+            var order = new Order();
+            order.DateCreated.Should().BeWithin(TimeSpan.FromSeconds(1)).Before(DateTimeOffset.Now);
+        }
+        
+        [TestMethod]
+        public void WhenAnOrderIsUpdated_DateUpdatedReflectsThis()
+        {
+            var order = new Order();
+            var itemToAdd = new OrderItem
+            {
+                Price = 5.50M,
+                Quantity = 1
+            };
+
+            order.AddItem(itemToAdd);
+            order.DateUpdated.Should().BeAfter(order.DateCreated);
+            order.DateUpdated.Should().BeWithin(TimeSpan.FromSeconds(1)).Before(DateTimeOffset.Now);
+        }
+
     }
 }
