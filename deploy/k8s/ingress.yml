@@ -10,7 +10,7 @@ metadata:
     app: orders-api
 spec:
   rules:
-    - host: ___hostname___
+    - host:
       http:
         paths:
           - path: /*
