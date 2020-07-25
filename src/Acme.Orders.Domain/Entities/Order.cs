@@ -61,9 +61,12 @@ namespace Acme.Orders.Domain.Entities
                 throw new OrdersDomainException($"Cannot place an empty order.");
         }
 
-        public void CalculateShipping(IShippingCalculatorService shippingcalculator)
+        public void CalculateShipping(IShippingCalculatorService shippingCalculator)
         {
-            ShippingCost = shippingcalculator.CalculateShippingCost(ShippingAddress);
+            if (Status != OrderStatus.New)
+                throw new OrdersDomainException($"An order's shipping cost cannot be modified after the order is placed.");
+            
+            ShippingCost = shippingCalculator.CalculateShippingCost(ShippingAddress);
         }
 
         private void CheckThatItemsCanBeModified()

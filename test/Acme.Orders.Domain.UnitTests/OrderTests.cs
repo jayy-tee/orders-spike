@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using Acme.Orders.Domain.Entities;
 using Acme.Orders.Domain.Exceptions;
+using Acme.Orders.Domain.UnitTests.Fakes;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -96,6 +97,34 @@ namespace Acme.Orders.Domain.UnitTests
 
             order.Items.Count.Should().Be(expectedItemCount);
             order.Items.Should().NotContain(itemToAdd);
+        }
+
+        [TestMethod]
+        public void WhenShippingCostIsCalculated_TheOrderReflectsTheCorrectAmount()
+        {
+            var order = new Order();
+            var calculator = new ShippingCalculatorFake();
+            
+            order.CalculateShipping(calculator);
+
+            order.ShippingCost.Should().Be(calculator.ShippingCost);
+        }
+        
+        [TestMethod]
+        public void WhenAnOrderIsPlaced_ShippingCostCanNotChange()
+        {
+            var order = new Order();
+            var calculator = new ShippingCalculatorFake();
+            var itemToAdd = new OrderItem
+            {
+                Price = 5.50M,
+                Quantity = 1
+            };
+            
+            order.AddItem(itemToAdd);
+            order.Place();
+            
+            Assert.ThrowsException<OrdersDomainException>(() => order.CalculateShipping(calculator));
         }
         
         /* Further tests added, just to please the code coverage report. Do they add any value though? ;) */
