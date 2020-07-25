@@ -20,13 +20,13 @@ steps:
         projects: $(unitTestTarget)
         arguments: '--no-restore -c Release /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=$(Build.SourcesDirectory)/TestResults/UnitTests'
         noBuild: true
-    # - task: DotNetCoreCLI@2
-    #   displayName: Run In-Process Acceptance Tests
-    #   inputs:
-    #     command: test
-    #     projects: $(acceptanceTestTarget)
-    #     arguments: '-c Release /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=$(Build.SourcesDirectory)/TestResults/AcceptanceTests'
-    #     noBuild: true
+    - task: DotNetCoreCLI@2
+      displayName: Run In-Process Acceptance Tests
+      inputs:
+        command: test
+        projects: $(acceptanceTestTarget)
+        arguments: '-c Release /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=$(Build.SourcesDirectory)/TestResults/AcceptanceTests'
+        noBuild: true
     - task: PublishCodeCoverageResults@1
       displayName: 'Publish code coverage report'
       inputs:
