@@ -33,6 +33,7 @@ namespace Acme.Orders.Api
             }
         }
 
+        public static IHostBuilder CreateHostBuilder() => CreateHostBuilder(null);
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
                 .ConfigureHostConfiguration(builder => BuildConfig(builder))
