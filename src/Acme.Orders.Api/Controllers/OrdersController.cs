@@ -29,7 +29,7 @@ namespace Acme.Orders.Api.Controllers
         {
             var order = await _mediator.Send(new CreateOrderCommand());
 
-            return CreatedAtAction(nameof(GetOrder), new { orderId = order }, order);
+            return CreatedAtAction(nameof(GetOrder), new { orderId = order }, order.ToString());
         }
 
         [HttpGet]
