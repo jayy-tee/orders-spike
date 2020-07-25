@@ -5,6 +5,9 @@ trigger:
 
 variables:
     dockerImageName: 'orders/api'
+    buildTarget: '**/*.sln'
+    acceptanceTestTarget: '**/*.AcceptanceTests.csproj'
+    unitTestTarget: '**/*.UnitTests.csproj'
 
 stages:
 - stage: build
@@ -15,14 +18,8 @@ stages:
     pool:
         vmImage: 'ubuntu-latest'
     steps:
-        - task: DotNetCoreCLI@2
-          displayName: 'dotnet publish'
-          inputs:
-            command: publish
-            projects: '**/*.sln'
-            arguments: '-c Release -p:Version=$(Build.BuildNumber)'
-            publishWebProjects: false
-            zipAfterPublish: false
+      - template: templates/build-test-steps.yml
+      - ${{ if ne(variables['Build.Reason'], 'PullRequest') }}:
         - script: |
             docker build -t $(dockerImageName):$(Build.BuildNumber) -f build/Dockerfile .
           displayName: Build Docker container
@@ -40,4 +37,4 @@ stages:
           inputs:
             pathToPublish: 'deploy/k8s/'
             artifactName: k8s
-          
+              
