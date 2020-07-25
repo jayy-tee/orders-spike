@@ -6,8 +6,10 @@ namespace Acme.Orders.Api.Config
 {
     public class ConfigurationSingleton
     {
+        public const string EnvironmentVariablePrefix = "ACME";
         private static IConfiguration _instance;
         private static readonly object _padlock = new object();
+
 
         public static IConfiguration Instance
         {
@@ -35,7 +37,7 @@ namespace Acme.Orders.Api.Config
             .AddJsonFile("serilogSettings.json", optional: false, reloadOnChange: true)
             .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Development"}.json", optional: true)
             .AddJsonFile($"serilogSettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Development"}.json", optional: true)
-            .AddEnvironmentVariables();
+            .AddEnvironmentVariables(EnvironmentVariablePrefix);
             
             return result;
         }            
