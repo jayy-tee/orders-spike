@@ -67,5 +67,14 @@ namespace Acme.Orders.Api.Controllers
 
             return NoContent();
         }
+        
+        [HttpPost]
+        [Route("{orderId}/place")]
+        public async Task<IActionResult> PlaceOrder(Guid orderId)
+        {
+            var order = await _mediator.Send(new PlaceOrderCommand(orderId));
+
+            return AcceptedAtAction(nameof(GetOrder), new { orderId = orderId }, null);
+        }
     }
 }

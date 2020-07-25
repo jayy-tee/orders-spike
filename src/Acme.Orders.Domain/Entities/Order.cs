@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Acme.Orders.Common.Enums;
 using Acme.Orders.Common.ValueObjects;
+using Acme.Orders.Domain.Exceptions;
 using Acme.Orders.Domain.Services;
 
 namespace Acme.Orders.Domain.Entities
@@ -29,19 +30,46 @@ namespace Acme.Orders.Domain.Entities
 
         public void AddItem(OrderItem theItem)
         {
+            CheckThatItemsCanBeModified();
+            
             _items.Add(theItem);
             UpdateOrder();
         }
 
         public void RemoveItem(OrderItem theItem)
         {
+            CheckThatItemsCanBeModified();
+
             _items.Remove(theItem);
             UpdateOrder();
+        }
+
+        public void Place()
+        {
+            CheckThatOrderCanBePlaced();
+            
+            Status = OrderStatus.Placed;
+            UpdateOrder();
+        }
+
+        private void CheckThatOrderCanBePlaced()
+        {
+            if (Status != OrderStatus.New)
+                throw new OrdersDomainException($"Cannot place an already placed order. Order status: {Status}");
+            
+            if (_items.Count == 0)
+                throw new OrdersDomainException($"Cannot place an empty order.");
         }
 
         public void CalculateShipping(IShippingCalculatorService shippingcalculator)
         {
             ShippingCost = shippingcalculator.CalculateShippingCost(ShippingAddress);
+        }
+
+        private void CheckThatItemsCanBeModified()
+        {
+            if (Status != OrderStatus.New)
+                throw new OrdersDomainException($"Cannot modify items of an order with status '{Status}'");
         }
 
         private void UpdateOrder()
