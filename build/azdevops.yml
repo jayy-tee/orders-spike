@@ -20,21 +20,36 @@ stages:
     steps:
       - template: templates/build-test-steps.yml
       - ${{ if ne(variables['Build.Reason'], 'PullRequest') }}:
-        - script: |
-            docker build -t $(dockerImageName):$(Build.BuildNumber) -f build/Dockerfile .
-          displayName: Build Docker container
-        - task: AmazonWebServices.aws-vsts-tools.ECRPushImage.ECRPushImage@1
-          displayName: 'Push Image to AWS'
-          inputs:
-            awsCredentials: 'AWS-JT'
-            regionName: 'ap-southeast-2'
-            sourceImageName: '$(dockerImageName)'
-            sourceImageTag: '$(Build.BuildNumber)'
-            repositoryName: '$(dockerImageName)'
-            pushTag: '$(Build.BuildNumber)'
-            autoCreateRepository: true
-        - task: PublishBuildArtifacts@1
-          inputs:
-            pathToPublish: 'deploy/k8s/'
-            artifactName: k8s
-              
+        - publish: 'src/Acme.Orders.Api/bin/Release/netcoreapp3.1/publish/'
+          artifact: api
+        - publish: 'deploy/k8s'
+          artifact: k8s
+        - publish: 'build'
+          artifact: buildResources
+- ${{ if ne(variables['Build.Reason'], 'PullRequest') }}:
+  - stage: buildContainer
+    displayName: Build & Test Docker Container
+    jobs:
+    - job: containerTest
+      displayName: Build & Test Docker Container
+      pool:
+          vmImage: 'ubuntu-latest'
+      steps:
+      - download: current
+        artifact: api
+      - download: current
+        artifact: buildResources
+      - script: |
+          docker build -t $(dockerImageName):$(Build.BuildNumber) -f $(Pipeline.Workspace)/buildResources/Dockerfile $(Pipeline.Workspace)/api/
+        displayName: Build Docker container
+      - task: AmazonWebServices.aws-vsts-tools.ECRPushImage.ECRPushImage@1
+        displayName: 'Push Image to AWS'
+        inputs:
+          awsCredentials: 'AWS-JT'
+          regionName: 'ap-southeast-2'
+          sourceImageName: '$(dockerImageName)'
+          sourceImageTag: '$(Build.BuildNumber)'
+          repositoryName: '$(dockerImageName)'
+          pushTag: '$(Build.BuildNumber)'
+          autoCreateRepository: true
+                
