@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Acme.Orders.Api.Exceptions;
 using Acme.Orders.Application.Exceptions;
 using Microsoft.AspNetCore.Hosting;
@@ -11,15 +12,15 @@ namespace Acme.Orders.Api.Filters
         {
         }
 
-        public override void OnException(ExceptionContext context)
+        public override async Task OnExceptionAsync(ExceptionContext context)
         {
             if (context.Exception is BusinessException)
             {
                 context.ExceptionHandled = true;
-                ExceptionResponseHelper.WriteResponseForException(context.Exception, context.HttpContext, true).GetAwaiter().GetResult();
+                await ExceptionResponseHelper.WriteResponseForException(context.Exception, context.HttpContext, true);
             }
 
-            base.OnException(context);
+            await base.OnExceptionAsync(context);
         }
     }
 }
