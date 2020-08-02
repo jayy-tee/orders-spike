@@ -4,7 +4,7 @@ using Acme.Orders.Application.Common;
 using Acme.Orders.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace Acme.Orders.Infrastructure.Persistence
+namespace Acme.Orders.Data
 {
     public class AcmeDbContext : DbContext, IAcmeDbContext
     {

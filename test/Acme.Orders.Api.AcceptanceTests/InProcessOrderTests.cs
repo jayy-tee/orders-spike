@@ -5,7 +5,7 @@ using System;
 using System.Linq;
 using System.Net;
 using Acme.Orders.Application.Common;
-using Acme.Orders.Infrastructure.Persistence;
+using Acme.Orders.Data;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 

@@ -13,6 +13,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Acme.Orders.Application\Acme.Orders.Application.csproj" />
     <ProjectReference Include="..\Acme.Orders.Common\Acme.Orders.Common.csproj" />
+    <ProjectReference Include="..\Acme.Orders.Data\Acme.Orders.Data.csproj" />
     <ProjectReference Include="..\Acme.Orders.Infrastructure\Acme.Orders.Infrastructure.csproj" />
   </ItemGroup>
 

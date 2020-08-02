@@ -9,6 +9,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\Acme.Orders.Api\Acme.Orders.Api.csproj" />
     <ProjectReference Include="..\..\src\Acme.Orders.Common\Acme.Orders.Common.csproj" />
+    <ProjectReference Include="..\..\src\Acme.Orders.Data\Acme.Orders.Data.csproj" />
     <ProjectReference Include="..\..\src\Acme.Orders.Domain\Acme.Orders.Domain.csproj" />
     <ProjectReference Include="..\Acme.Orders.TestSdk\Acme.Orders.TestSdk.csproj" />
   </ItemGroup>
