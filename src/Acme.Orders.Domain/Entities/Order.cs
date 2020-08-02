@@ -78,6 +78,7 @@ namespace Acme.Orders.Domain.Entities
         private void UpdateOrder()
         {
             DateUpdated = DateTimeOffset.Now;
+            Total = _items.Select(i => i.Cost).Sum();
         }
     }
 }

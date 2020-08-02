@@ -1,5 +1,14 @@
 version: "3.8"
 services:
+  mysql:
+    image: mysql:5.7
+    ports:
+      - "13306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: ado9u3hdh3i3ijqijdasdlj
+      MYSQL_USER: acme_orders
+      MYSQL_PASSWORD: ado9u3hdh3i3ijqijdasdlj
+      MYSQL_DATABASE: AcmeOrders
   seq:
     image: datalust/seq
     ports:

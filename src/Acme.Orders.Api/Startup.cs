@@ -2,6 +2,7 @@ using Acme.Orders.Api.Exceptions;
 using Acme.Orders.Api.Filters;
 using Acme.Orders.Api.Logging;
 using Acme.Orders.Application;
+using Acme.Orders.Data;
 using Acme.Orders.Infrastructure;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -29,6 +30,7 @@ namespace Acme.Orders.Api
                 options.Filters.Add(typeof(ApiExceptionFilter))
             );
             services.AddApplication();
+            services.AddData(Configuration);
             services.AddInfrastructure(Configuration);
         }
 

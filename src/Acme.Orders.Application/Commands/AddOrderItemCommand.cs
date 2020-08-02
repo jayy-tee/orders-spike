@@ -32,7 +32,7 @@ namespace Acme.Orders.Application.Commands
 
             public async Task<Unit> Handle(AddOrderItemCommand command, CancellationToken cancellationToken)
             {
-                var order = await _context.Orders.SingleOrDefaultAsync(o => o.Id == command.OrderId, cancellationToken);
+                var order = await _context.Orders.Include(o => o.Items).SingleOrDefaultAsync(o => o.Id == command.OrderId, cancellationToken);
                 _ = order != null ? true : throw new NotFoundException("Order Not Found");
             
                 order.AddItem(command.OrderItem.ToDomainModel());
