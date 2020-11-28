@@ -11,6 +11,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 using System;
+using Microsoft.AspNetCore.Routing;
+using Microsoft.Extensions.Options;
 
 namespace Acme.Orders.Api
 {
@@ -26,7 +28,12 @@ namespace Acme.Orders.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllersWithViews(options =>
+            services.Configure<RouteOptions>(options =>
+            {
+                options.LowercaseQueryStrings = true;
+                options.LowercaseUrls = true;
+            });
+            services.AddControllers(options =>
                 options.Filters.Add(typeof(ApiExceptionFilter))
             );
             services.AddApplication();
