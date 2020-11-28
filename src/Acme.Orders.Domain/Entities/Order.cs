@@ -10,7 +10,7 @@ namespace Acme.Orders.Domain.Entities
 {
     public class Order
     {
-        public Guid Id { get; private set; } = Guid.NewGuid();
+        public ulong Id { get; private set; }
         public DateTimeOffset DateCreated { get; private set; } = DateTimeOffset.Now;
         public DateTimeOffset DateUpdated { get; private set; } = DateTimeOffset.Now;
         public OrderStatus Status { get; private set; } = OrderStatus.New;
@@ -21,7 +21,12 @@ namespace Acme.Orders.Domain.Entities
 
         private readonly List<OrderItem> _items = new List<OrderItem>();
 
-        public Order() { }
+        private Order() { }
+
+        public Order(ulong id)
+        {
+            Id = id;
+        }
 
         public void AddItems(IEnumerable<OrderItem> theItems)
         {

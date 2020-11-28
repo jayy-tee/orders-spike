@@ -36,7 +36,7 @@ namespace Acme.Orders.Api.Controllers
         {
             try
             {
-                var order = await _mediator.Send(new GetOrderQuery(Guid.NewGuid()));
+                var order = await _mediator.Send(new GetOrderQuery(new ulong()));
             }
             catch (NotFoundException)
             {

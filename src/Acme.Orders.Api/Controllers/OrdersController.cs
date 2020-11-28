@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
+using Acme.Orders.Api.Responses;
 using Acme.Orders.Application.Commands;
 using Acme.Orders.Application.Model;
 using Acme.Orders.Application.Queries;
+using Acme.Orders.Common.Enums;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -23,6 +26,29 @@ namespace Acme.Orders.Api.Controllers
             _mediator = mediator;
         }
 
+        [HttpGet]
+        [Route("", Name = "GetOrders")]
+        public async Task<ActionResult<OrdersResponse>> GetOrders([FromQuery] ulong? cursor, [FromQuery] OrderStatus? status)
+        {
+            var orders = await _mediator.Send(new GetOrdersQuery(cursor, status));
+            var response = orders.MapToResponseModel();
+
+            if (!orders.IsLastPage && orders.Orders.Any())
+                response.NextPage = Url.Link(nameof(GetOrders), new {cursor = orders.Orders.Last().Id, status = status});
+          
+            return Ok(response);
+        }
+
+        [HttpGet]
+        [Route("summary")]
+        public async Task<ActionResult<OrdersSummary>> GetOrderSummary()
+        {
+            var response = await _mediator.Send(new GetOrdersSummary());
+
+            return Ok(response);
+        }
+
+
         [HttpPost]
         [Route("new")]
         public async Task<IActionResult> CreateOrder()
@@ -34,7 +60,7 @@ namespace Acme.Orders.Api.Controllers
 
         [HttpGet]
         [Route("{orderId}")]
-        public async Task<IActionResult> GetOrder(Guid orderId)
+        public async Task<IActionResult> GetOrder(ulong orderId)
         {
             var order = await _mediator.Send(new GetOrderQuery(orderId));
 
@@ -43,7 +69,7 @@ namespace Acme.Orders.Api.Controllers
 
         [HttpGet]
         [Route("{orderId}/items")]
-        public async Task<IActionResult> GetOrderItems(Guid orderId)
+        public async Task<IActionResult> GetOrderItems(ulong orderId)
         {
             var orderItems = await _mediator.Send(new GetOrderItemsQuery(orderId));
 
@@ -52,7 +78,7 @@ namespace Acme.Orders.Api.Controllers
 
         [HttpPost]
         [Route("{orderId}/items/add")]
-        public async Task<IActionResult> AddOrderItem(Guid orderId, [FromBody] OrderItemDto orderItem)
+        public async Task<IActionResult> AddOrderItem(ulong orderId, [FromBody] OrderItemDto orderItem)
         {
             var order = await _mediator.Send(new AddOrderItemCommand(orderId, orderItem));
 
@@ -61,7 +87,7 @@ namespace Acme.Orders.Api.Controllers
 
         [HttpDelete]
         [Route("{orderId}/items/{itemId}")]
-        public async Task<IActionResult> DeleteOrderItem(Guid orderId, int itemId)
+        public async Task<IActionResult> DeleteOrderItem(ulong orderId, int itemId)
         {
             var order = await _mediator.Send(new DeleteOrderItemCommand(itemId, orderId));
 
@@ -70,7 +96,7 @@ namespace Acme.Orders.Api.Controllers
         
         [HttpPost]
         [Route("{orderId}/place")]
-        public async Task<IActionResult> PlaceOrder(Guid orderId)
+        public async Task<IActionResult> PlaceOrder(ulong orderId)
         {
             var order = await _mediator.Send(new PlaceOrderCommand(orderId));
 

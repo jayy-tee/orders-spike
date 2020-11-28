@@ -12,7 +12,8 @@ namespace Acme.Orders.Data.Migrations
                 name: "Orders",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(nullable: false),
+                    Id = table.Column<ulong>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     DateCreated = table.Column<DateTimeOffset>(type: "TIMESTAMP", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
                     DateUpdated = table.Column<DateTimeOffset>(type: "TIMESTAMP", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
                     Status = table.Column<int>(nullable: false),
@@ -34,7 +35,7 @@ namespace Acme.Orders.Data.Migrations
                     Description = table.Column<string>(nullable: true),
                     Price = table.Column<decimal>(nullable: false),
                     Quantity = table.Column<int>(nullable: false),
-                    OrderId = table.Column<Guid>(nullable: true)
+                    OrderId = table.Column<ulong>(nullable: true)
                 },
                 constraints: table =>
                 {
