@@ -4,7 +4,7 @@ namespace Acme.Orders.Application.Model
 {
     public class OrderDto
     {
-        public Guid Id { get; set; }
+        public ulong Id { get; set; }
         public DateTimeOffset DateCreated { get; set; }
         public DateTimeOffset DateUpdated { get; set; }
         public string Status { get; set; }

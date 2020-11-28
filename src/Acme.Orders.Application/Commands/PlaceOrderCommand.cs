@@ -13,9 +13,9 @@ namespace Acme.Orders.Application.Commands
 {
     public class PlaceOrderCommand : IRequest
     {
-        public Guid OrderId { get; private set; }
+        public ulong OrderId { get; private set; }
 
-        public PlaceOrderCommand(Guid orderId)
+        public PlaceOrderCommand(ulong orderId)
         {
             OrderId = orderId;
         }
@@ -31,8 +31,8 @@ namespace Acme.Orders.Application.Commands
 
             public async Task<Unit> Handle(PlaceOrderCommand command, CancellationToken cancellationToken)
             {
-                var order = await _context.Orders.Include(o => o.Items).SingleOrDefaultAsync(o => o.Id == command.OrderId, cancellationToken);
-                _ = order != null ? true : throw new NotFoundException("Order Not Found");
+                var order = await _context.Orders.Include(o => o.Items).SingleOrDefaultAsync(o => o.Id == command.OrderId, cancellationToken)
+                    ?? throw new NotFoundException("Order Not Found") ;
                 
                 order.Place();
                 await _context.SaveAsync(cancellationToken);

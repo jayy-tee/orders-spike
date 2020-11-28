@@ -21,7 +21,7 @@ namespace Acme.Orders.Api.AcceptanceTests
         public void WhenAnOrderDoesntExist_WeGetNotFound()
         {
             // Arrange
-            var nonExistentOrder = Guid.NewGuid().ToString();
+            var nonExistentOrder = new ulong().ToString();
             var request = new OrderRequestBuilder()
                 .GetOrder(withOrderId: nonExistentOrder)
                 .Build();

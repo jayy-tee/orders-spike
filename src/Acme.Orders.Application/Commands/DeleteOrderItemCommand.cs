@@ -11,10 +11,10 @@ namespace Acme.Orders.Application.Commands
 {
     public class DeleteOrderItemCommand : IRequest
     {
-        public Guid OrderId { get; private set; }
+        public ulong OrderId { get; private set; }
         public int ItemId { get; private set; }
 
-        public DeleteOrderItemCommand(int itemId, Guid orderId)
+        public DeleteOrderItemCommand(int itemId, ulong orderId)
         {
             OrderId = orderId;
             ItemId = itemId;
