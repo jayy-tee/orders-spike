@@ -19,9 +19,9 @@ namespace Acme.Orders.Data.Migrations
 
             modelBuilder.Entity("Acme.Orders.Domain.Entities.Order", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<ulong>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
+                        .HasColumnType("bigint unsigned");
 
                     b.Property<DateTimeOffset>("DateCreated")
                         .ValueGeneratedOnAdd()
@@ -56,8 +56,8 @@ namespace Acme.Orders.Data.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
-                    b.Property<Guid?>("OrderId")
-                        .HasColumnType("char(36)");
+                    b.Property<ulong?>("OrderId")
+                        .HasColumnType("bigint unsigned");
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(65,30)");

@@ -12,9 +12,9 @@ namespace Acme.Orders.Application.Queries
 {
     public class GetOrderQuery : IRequest<OrderDto>
     {
-        public Guid OrderId { get; private set; }
+        public ulong OrderId { get; private set; }
 
-        public GetOrderQuery(Guid orderId)
+        public GetOrderQuery(ulong orderId)
         {
             OrderId = orderId;
         }
@@ -29,9 +29,9 @@ namespace Acme.Orders.Application.Queries
 
             public async Task<OrderDto> Handle(GetOrderQuery query, CancellationToken cancellationToken)
             {
-                var order = await _context.Orders.SingleOrDefaultAsync(o => o.Id == query.OrderId);
-                _ = order != null ? true : throw new NotFoundException("Order Not Found");
-                
+                var order = await _context.Orders.SingleOrDefaultAsync(o => o.Id == query.OrderId)
+                            ?? throw new NotFoundException("Order Not Found");
+
                 return order.MapToDto();
             }
         } 

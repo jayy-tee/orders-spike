@@ -12,11 +12,11 @@ namespace Acme.Orders.Application.Commands
 {
     public class AddOrderItemCommand : IRequest
     {
-        public Guid OrderId { get; private set; }
+        public ulong OrderId { get; private set; }
         public OrderItemDto OrderItem { get; private set; }
 
 
-        public AddOrderItemCommand(Guid forOrder, OrderItemDto withItem)
+        public AddOrderItemCommand(ulong forOrder, OrderItemDto withItem)
         {
             OrderId = forOrder;
             OrderItem = withItem;
