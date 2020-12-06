@@ -21,10 +21,10 @@ namespace Acme.Orders.Application.Queries
         {
         }
 
-        public class GetOrderSummaryHandler : IRequestHandler<GetOrdersSummary, OrdersSummary>
+        public class GetOrdersSummaryHandler : IRequestHandler<GetOrdersSummary, OrdersSummary>
         {
             private readonly IAcmeDbContext _context;
-            public GetOrderSummaryHandler(IAcmeDbContext context)
+            public GetOrdersSummaryHandler(IAcmeDbContext context)
             {
                 _context = context;
             }
@@ -34,7 +34,7 @@ namespace Acme.Orders.Application.Queries
                 var orders = await _context.Orders
                     .GroupBy(o => o.Status)
                     .Select(g => new {Status = g.Key.ToString(), Count = g.Count()})
-                    .ToDictionaryAsync(s => s.Status, c => c.Count);
+                    .ToDictionaryAsync(s => s.Status, c => c.Count, cancellationToken);
                 
                 return new OrdersSummary{ OrderStatuses = orders };
             }

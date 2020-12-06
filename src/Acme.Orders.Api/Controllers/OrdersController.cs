@@ -30,7 +30,7 @@ namespace Acme.Orders.Api.Controllers
         [Route("", Name = "GetOrders")]
         public async Task<ActionResult<OrdersResponse>> GetOrders([FromQuery] ulong? cursor, [FromQuery] OrderStatus? status)
         {
-            var orders = await _mediator.Send(new GetOrdersQuery(cursor, status));
+            var orders = await _mediator.Send(new GetOrders(cursor, status));
             var response = orders.MapToResponseModel();
 
             if (!orders.IsLastPage && orders.Orders.Any())
@@ -62,7 +62,7 @@ namespace Acme.Orders.Api.Controllers
         [Route("{orderId}")]
         public async Task<IActionResult> GetOrder(ulong orderId)
         {
-            var order = await _mediator.Send(new GetOrderQuery(orderId));
+            var order = await _mediator.Send(new GetOrder(orderId));
 
             return Ok(order);
         }
@@ -71,7 +71,7 @@ namespace Acme.Orders.Api.Controllers
         [Route("{orderId}/items")]
         public async Task<IActionResult> GetOrderItems(ulong orderId)
         {
-            var orderItems = await _mediator.Send(new GetOrderItemsQuery(orderId));
+            var orderItems = await _mediator.Send(new GetOrderItems(orderId));
 
             return Ok(orderItems);
         }

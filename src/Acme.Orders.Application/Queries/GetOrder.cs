@@ -10,24 +10,24 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Acme.Orders.Application.Queries
 {
-    public class GetOrderQuery : IRequest<OrderDto>
+    public class GetOrder : IRequest<OrderDto>
     {
         public ulong OrderId { get; private set; }
 
-        public GetOrderQuery(ulong orderId)
+        public GetOrder(ulong orderId)
         {
             OrderId = orderId;
         }
 
-        public class GetOrderQueryHandler : IRequestHandler<GetOrderQuery, OrderDto>
+        public class GetOrderHandler : IRequestHandler<GetOrder, OrderDto>
         {
             private readonly IAcmeDbContext _context;
-            public GetOrderQueryHandler(IAcmeDbContext context)
+            public GetOrderHandler(IAcmeDbContext context)
             {
                 _context = context;
             }
 
-            public async Task<OrderDto> Handle(GetOrderQuery query, CancellationToken cancellationToken)
+            public async Task<OrderDto> Handle(GetOrder query, CancellationToken cancellationToken)
             {
                 var order = await _context.Orders.SingleOrDefaultAsync(o => o.Id == query.OrderId)
                             ?? throw new NotFoundException("Order Not Found");
