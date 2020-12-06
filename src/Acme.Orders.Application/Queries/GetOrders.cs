@@ -12,27 +12,27 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Acme.Orders.Application.Queries
 {
-    public class GetOrdersQuery : IRequest<OrdersResult>
+    public class GetOrders : IRequest<OrdersResult>
     {
         public int ResultsPerPage = 10;
         public ulong? Cursor;
         public OrderStatus? Status;
 
-        public GetOrdersQuery(ulong? cursor, OrderStatus? status)
+        public GetOrders(ulong? cursor, OrderStatus? status)
         {
             Cursor = cursor;
             Status = status;
         }
 
-        public class GetOrdersQueryHandler : IRequestHandler<GetOrdersQuery, OrdersResult>
+        public class GetOrdersHandler : IRequestHandler<GetOrders, OrdersResult>
         {
             private readonly IAcmeDbContext _context;
-            public GetOrdersQueryHandler(IAcmeDbContext context)
+            public GetOrdersHandler(IAcmeDbContext context)
             {
                 _context = context;
             }
 
-            public async Task<OrdersResult> Handle(GetOrdersQuery query, CancellationToken cancellationToken)
+            public async Task<OrdersResult> Handle(GetOrders query, CancellationToken cancellationToken)
             {
                 var orders = await _context.Orders.AsQueryable()
                     .Where(o => !query.Cursor.HasValue || o.Id > query.Cursor.Value)
@@ -42,7 +42,7 @@ namespace Acme.Orders.Application.Queries
 
                 return new OrdersResult
                 {
-                    Orders = orders.Take(query.ResultsPerPage).Select(o => o.MapToDto()),
+                    Orders = orders.Take(query.ResultsPerPage).Select(o => o.MapToDto()).ToList(),
                     IsLastPage = orders.Count <= query.ResultsPerPage
                 };
             }
