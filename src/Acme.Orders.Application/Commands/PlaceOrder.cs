@@ -11,25 +11,25 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Acme.Orders.Application.Commands
 {
-    public class PlaceOrderCommand : IRequest
+    public class PlaceOrder : IRequest
     {
         public ulong OrderId { get; private set; }
 
-        public PlaceOrderCommand(ulong orderId)
+        public PlaceOrder(ulong orderId)
         {
             OrderId = orderId;
         }
 
-        public class PlaceOrderCommandHandler : IRequestHandler<PlaceOrderCommand>
+        public class PlaceOrderHandler : IRequestHandler<PlaceOrder>
         {
             private readonly IAcmeDbContext _context;
 
-            public PlaceOrderCommandHandler(IAcmeDbContext context)
+            public PlaceOrderHandler(IAcmeDbContext context)
             {
                 _context = context;
             }
 
-            public async Task<Unit> Handle(PlaceOrderCommand command, CancellationToken cancellationToken)
+            public async Task<Unit> Handle(PlaceOrder command, CancellationToken cancellationToken)
             {
                 var order = await _context.Orders.Include(o => o.Items).SingleOrDefaultAsync(o => o.Id == command.OrderId, cancellationToken)
                     ?? throw new NotFoundException("Order Not Found") ;

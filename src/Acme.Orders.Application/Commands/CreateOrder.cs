@@ -8,22 +8,22 @@ using MediatR;
 
 namespace Acme.Orders.Application.Commands
 {
-    public class CreateOrderCommand : IRequest<ulong>
+    public class CreateOrder : IRequest<ulong>
     {
         public Guid CustomerId { get; private set; }
 
-        public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, ulong>
+        public class CreateOrderHandler : IRequestHandler<CreateOrder, ulong>
         {
             private readonly IAcmeDbContext _context;
             private readonly IIdGenerator _idGenerator;
 
-            public CreateOrderCommandHandler(IAcmeDbContext context, IIdGenerator idGenerator)
+            public CreateOrderHandler(IAcmeDbContext context, IIdGenerator idGenerator)
             {
                 _context = context;
                 _idGenerator = idGenerator;
             }
 
-            public async Task<ulong> Handle(CreateOrderCommand command, CancellationToken cancellationToken)
+            public async Task<ulong> Handle(CreateOrder command, CancellationToken cancellationToken)
             {
                 var order = new Order(_idGenerator.GetId());
                 await _context.Orders.AddAsync(order, cancellationToken);
