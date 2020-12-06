@@ -10,27 +10,27 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Acme.Orders.Application.Commands
 {
-    public class AddOrderItemCommand : IRequest
+    public class AddOrderItem : IRequest
     {
         public ulong OrderId { get; private set; }
         public OrderItemDto OrderItem { get; private set; }
 
 
-        public AddOrderItemCommand(ulong forOrder, OrderItemDto withItem)
+        public AddOrderItem(ulong forOrder, OrderItemDto withItem)
         {
             OrderId = forOrder;
             OrderItem = withItem;
         }
 
-        public class AddOrderItemCommandHandler : IRequestHandler<AddOrderItemCommand>
+        public class AddOrderItemHandler : IRequestHandler<AddOrderItem>
         {
             private readonly IAcmeDbContext _context;
-            public AddOrderItemCommandHandler(IAcmeDbContext context)
+            public AddOrderItemHandler(IAcmeDbContext context)
             {
                 _context = context;
             }
 
-            public async Task<Unit> Handle(AddOrderItemCommand command, CancellationToken cancellationToken)
+            public async Task<Unit> Handle(AddOrderItem command, CancellationToken cancellationToken)
             {
                 var order = await _context.Orders.Include(o => o.Items).SingleOrDefaultAsync(o => o.Id == command.OrderId, cancellationToken);
                 _ = order != null ? true : throw new NotFoundException("Order Not Found");

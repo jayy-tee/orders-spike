@@ -53,7 +53,7 @@ namespace Acme.Orders.Api.Controllers
         [Route("new")]
         public async Task<IActionResult> CreateOrder()
         {
-            var order = await _mediator.Send(new CreateOrderCommand());
+            var order = await _mediator.Send(new CreateOrder());
 
             return CreatedAtAction(nameof(GetOrder), new { orderId = order }, order.ToString());
         }
@@ -80,7 +80,7 @@ namespace Acme.Orders.Api.Controllers
         [Route("{orderId}/items/add")]
         public async Task<IActionResult> AddOrderItem(ulong orderId, [FromBody] OrderItemDto orderItem)
         {
-            var order = await _mediator.Send(new AddOrderItemCommand(orderId, orderItem));
+            var order = await _mediator.Send(new AddOrderItem(orderId, orderItem));
 
             return AcceptedAtAction(nameof(GetOrderItems), new { orderId = order }, null);
         }
@@ -89,7 +89,7 @@ namespace Acme.Orders.Api.Controllers
         [Route("{orderId}/items/{itemId}")]
         public async Task<IActionResult> DeleteOrderItem(ulong orderId, int itemId)
         {
-            var order = await _mediator.Send(new DeleteOrderItemCommand(itemId, orderId));
+            var order = await _mediator.Send(new DeleteOrderItem(itemId, orderId));
 
             return NoContent();
         }
@@ -98,7 +98,7 @@ namespace Acme.Orders.Api.Controllers
         [Route("{orderId}/place")]
         public async Task<IActionResult> PlaceOrder(ulong orderId)
         {
-            var order = await _mediator.Send(new PlaceOrderCommand(orderId));
+            var order = await _mediator.Send(new PlaceOrder(orderId));
 
             return AcceptedAtAction(nameof(GetOrder), new { orderId = orderId }, null);
         }
