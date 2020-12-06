@@ -10,7 +10,7 @@ namespace Acme.Orders.Api.Responses
             return new OrdersResponse
             {
                 Orders = ordersResult.Orders,
-                Count = ordersResult.Orders.Count()
+                Count = ordersResult.Orders.Count
             };
         }
     }
