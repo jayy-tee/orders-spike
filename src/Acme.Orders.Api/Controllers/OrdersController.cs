@@ -55,7 +55,7 @@ namespace Acme.Orders.Api.Controllers
         {
             var order = await _mediator.Send(new CreateOrder());
 
-            return CreatedAtAction(nameof(GetOrder), new { orderId = order }, order.ToString());
+            return CreatedAtAction(nameof(GetOrder), new { orderId = order.Id }, order);
         }
 
         [HttpGet]
