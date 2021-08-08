@@ -13,6 +13,6 @@ services:
     image: datalust/seq
     ports:
         - "5341:5341"
-        - "10080:80"
+        - "8081:80"
     environment:
         ACCEPT_EULA: Y
