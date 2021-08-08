@@ -9,9 +9,10 @@ namespace Acme.Orders.Data
     {
         public static IServiceCollection AddData(this IServiceCollection services, IConfiguration configuration)
         {
+            var connectionString = configuration.GetConnectionString("AcmeDb");
             services.AddDbContext<AcmeDbContext>(
-                options => options.UseMySql(
-                    configuration.GetConnectionString("AcmeDb"),
+                options => options.UseMySql(connectionString
+                    , ServerVersion.AutoDetect(connectionString),
                     b => b.MigrationsAssembly("Acme.Orders.Data"))); 
 
             services.AddScoped<IAcmeDbContext>(provider => provider.GetService<AcmeDbContext>());
