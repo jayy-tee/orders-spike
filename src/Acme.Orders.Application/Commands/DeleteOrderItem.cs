@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Acme.Orders.Application.Commands
 {
-    public class DeleteOrderItem : IRequest
+    public class DeleteOrderItem : ICommandRequest
     {
         public ulong OrderId { get; private set; }
         public int ItemId { get; private set; }
@@ -35,7 +35,6 @@ namespace Acme.Orders.Application.Commands
                 _ = order != null ? true : throw new NotFoundException("Order Not Found");
             
                 order.RemoveItem(order.Items.Where(i => i.Id == command.ItemId).Single());
-                await _context.SaveAsync(cancellationToken);
             
                 return Unit.Value;
             }
