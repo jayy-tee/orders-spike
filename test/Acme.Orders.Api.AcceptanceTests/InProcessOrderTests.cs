@@ -3,9 +3,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Linq;
-using System.Net;
-using Acme.Orders.Application.Common;
+using System.Text.Json;
 using Acme.Orders.Data;
+using Acme.Orders.TestSdk.ResponseModels;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 
@@ -59,6 +59,21 @@ namespace Acme.Orders.Api.AcceptanceTests
 
             // Act/Assert
             Client.Execute(request, andExpect: System.Net.HttpStatusCode.BadRequest);
+        }
+
+        [TestMethod]
+        public void WhenCreatingAnOrder_ItCanBeRetrieved()
+        {
+            // Arrange
+            var createRequest = new OrderRequestBuilder().CreateOrder()
+                .Build();
+            var createResponse = Client.Execute(createRequest, andExpect: System.Net.HttpStatusCode.Created);
+            var order = JsonSerializer.Deserialize<OrderResponse>(createResponse.Content);
+            var request = new OrderRequestBuilder().GetOrder(withOrderId: order?.id.ToString()).Build();
+
+
+            // Act
+            var response = Client.Execute(request, andExpect: System.Net.HttpStatusCode.OK);
         }
     }
 }
