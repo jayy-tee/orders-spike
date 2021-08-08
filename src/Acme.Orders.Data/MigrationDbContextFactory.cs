@@ -20,9 +20,9 @@ namespace Acme.Orders.Data
             var connectionString = configuration
                 .GetConnectionString("AcmeDb");
             
-            dbContextBuilder.UseMySql(connectionString, b => b.MigrationsAssembly("Acme.Orders.Data"));
-
-
+            dbContextBuilder.UseMySql(connectionString
+                , ServerVersion.AutoDetect(connectionString), b => b.MigrationsAssembly("Acme.Orders.Data"));
+            
             return new AcmeDbContext(dbContextBuilder.Options);
         }
     }
