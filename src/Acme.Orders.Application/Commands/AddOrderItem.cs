@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Acme.Orders.Application.Commands
 {
-    public class AddOrderItem : IRequest
+    public class AddOrderItem : ICommandRequest
     {
         public ulong OrderId { get; private set; }
         public OrderItemDto OrderItem { get; private set; }
@@ -37,7 +37,6 @@ namespace Acme.Orders.Application.Commands
             
                 order.AddItem(command.OrderItem.ToDomainModel());
                 _context.Orders.Update(order);
-                await _context.SaveAsync(cancellationToken);
             
                 return Unit.Value;
             }

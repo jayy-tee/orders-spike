@@ -20,7 +20,7 @@ namespace Acme.Orders.Application.Commands
             OrderId = orderId;
         }
 
-        public class PlaceOrderHandler : IRequestHandler<PlaceOrder>
+        public class PlaceOrderHandler : ICommandRequest<PlaceOrder>
         {
             private readonly IAcmeDbContext _context;
 
@@ -35,7 +35,6 @@ namespace Acme.Orders.Application.Commands
                     ?? throw new NotFoundException("Order Not Found") ;
                 
                 order.Place();
-                await _context.SaveAsync(cancellationToken);
 
                 return Unit.Value;
             }
